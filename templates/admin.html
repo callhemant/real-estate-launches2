@@ -9,17 +9,44 @@
 <body>
   <main class="container">
     <h2>Add New Project</h2>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li><strong style="color: red;">{{ message }}</strong></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
     <form method="POST" action="/add-project" enctype="multipart/form-data" class="grid">
       <input type="text" name="title" placeholder="Project Title" required>
-      <input type="text" name="builder" placeholder="Builder Name">
-      <input type="text" name="location" placeholder="Location">
-      <input type="text" name="price_range" placeholder="Price Range">
-      <input type="text" name="size_range" placeholder="Size Range">
-      <input type="text" name="possession" placeholder="Possession Date">
-      <input type="file" name="image" accept="image/*">
-      <textarea name="bhk" placeholder="3BHK,1500,9.24 Cr\n4BHK,2100,12.93 Cr"></textarea>
+      <input type="text" name="builder" placeholder="Builder Name" required>
+      <input type="text" name="location" placeholder="Location" required>
+      <input type="text" name="price_range" placeholder="Price Range" required>
+      <input type="text" name="size_range" placeholder="Size Range" required>
+      <input type="text" name="possession" placeholder="Possession Date" required>
+      <input type="file" name="image" accept=".jpg,.jpeg,.png,.gif" required>
+      <textarea name="bhk" placeholder="3BHK,1500,9.24 Cr\n4BHK,2100,12.93 Cr" rows="5" required></textarea>
       <button type="submit">Add Project</button>
     </form>
+
+    <hr>
+
+    <h3>Saved Projects:</h3>
+    {% if projects %}
+      <ul>
+        {% for project in projects %}
+          <li>
+            <strong>{{ project.title }}</strong> — {{ project.location }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No projects added yet.</p>
+    {% endif %}
   </main>
 </body>
 </html>
