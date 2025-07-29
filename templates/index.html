@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real Estate Projects</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    .project-card { display: flex; border: 1px solid #ccc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; gap: 1rem; }
+    .project-card img { width: 150px; height: 100px; object-fit: cover; border-radius: 4px; }
+    .project-info { flex: 1; }
+    .config-table { width: 100%; margin-top: 0.5rem; }
+    .config-table th, .config-table td { padding: 4px 8px; }
+    .config-table th { background: #f0f0f0; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>New Project Launches</h1>
+    {% for p in projects %}
+    <div class="project-card">
+      {% if p.image %}<img src="{{ p.image }}" alt="{{ p.title }}">{% endif %}
+      <div class="project-info">
+        <h3>{{ p.title }} <small style="float:right">{{ p.price_range }}</small></h3>
+        <p>By <strong>{{ p.builder }}</strong> • 📍 {{ p.location }}</p>
+        <p>📏 {{ p.size_range }} • 🗓️ {{ p.possession }}</p>
+        {% if p.configs %}
+        <table class="config-table">
+          <thead><tr><th>BHK</th><th>Size</th><th>Price</th></tr></thead>
+          <tbody>
+            {% for row in p.configs %}<tr><td>{{ row.type }}</td><td>{{ row.size }}</td><td>{{ row.price }}</td></tr>{% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </main>
+</body>
+</html>

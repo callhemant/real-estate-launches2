@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add Project</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+<body>
+  <main class="container">
+    <h2>Add New Project</h2>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="text" name="title" placeholder="Project Title" required>
+      <input type="text" name="builder" placeholder="Builder Name">
+      <input type="text" name="location" placeholder="Location">
+      <input type="text" name="price_range" placeholder="Price Range">
+      <input type="text" name="size_range" placeholder="Size Range">
+      <input type="text" name="possession" placeholder="Possession Date">
+      <input type="file" name="image" accept="image/*">
+      <textarea name="bhk" placeholder="3BHK,1500,9.24 Cr\n4BHK,2100,12.93 Cr"></textarea>
+      <button type="submit">Add Project</button>
+    </form>
+  </main>
+</body>
+</html>
