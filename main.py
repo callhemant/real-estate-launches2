@@ -153,7 +153,38 @@ def add_project():
 def logout():
     session.clear()
     return redirect(url_for("index"))
+import json
 
+LEADS_FILE = "leads.json"
+
+def save_lead(lead):
+    leads = []
+    if os.path.exists(LEADS_FILE):
+        with open(LEADS_FILE, "r") as f:
+            leads = json.load(f)
+    leads.append(lead)
+    with open(LEADS_FILE, "w") as f:
+        json.dump(leads, f, indent=2)
+
+@app.route("/submit-lead", methods=["POST"])
+def submit_lead():
+    name = request.form.get("name")
+    email = request.form.get("email")
+    mobile = request.form.get("mobile")
+    project_title = request.form.get("project_title")
+
+    if name and email and mobile:
+        save_lead({
+            "name": name,
+            "email": email,
+            "mobile": mobile,
+            "project": project_title
+        })
+        flash("Thanks for your interest!", "success")
+    else:
+        flash("All lead fields are required.", "error")
+
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=81)
