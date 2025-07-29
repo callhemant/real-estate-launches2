@@ -86,21 +86,30 @@ def add_project():
         size_range = request.form.get("size_range")
         possession = request.form.get("possession")
         bhk_data = request.form.get("bhk")
+        image = request.files.get("image")
+
+        print("🧪 DEBUG:")
+        print("Title:", title)
+        print("Builder:", builder)
+        print("Location:", location)
+        print("Price Range:", price_range)
+        print("Size Range:", size_range)
+        print("Possession:", possession)
+        print("BHK Data:", bhk_data)
+        print("Image:", image.filename if image else "No image uploaded")
 
         if not all([title, builder, location, price_range, size_range, possession, bhk_data]):
-            flash("All fields are required.")
+            flash("All fields are required.", "error")
             return redirect(url_for("admin"))
 
-        image = request.files.get("image")
         image_filename = ""
-
         if image and allowed_file(image.filename):
             timestamp = str(int(time.time()))
             filename = secure_filename(f"{title.lower().replace(' ', '_')}_{timestamp}.{image.filename.rsplit('.', 1)[1]}")
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             image_filename = f"static/uploads/{filename}"
         else:
-            flash("Please upload a valid image (png, jpg, jpeg, gif).")
+            flash("Invalid or missing image. Must be jpg, png, jpeg, or gif.", "error")
             return redirect(url_for("admin"))
 
         configs = []
@@ -108,7 +117,7 @@ def add_project():
         for line in lines:
             parts = line.strip().split(",")
             if len(parts) != 3:
-                flash("Each BHK line must have format: Type, Size, Price")
+                flash("Each BHK line must follow: Type, Size, Price", "error")
                 return redirect(url_for("admin"))
             configs.append({
                 "type": parts[0].strip(),
@@ -130,13 +139,15 @@ def add_project():
         projects = load_projects()
         projects.append(project)
         save_projects(projects)
-        flash("Project added successfully!")
+
+        print("✅ Project saved successfully.")
+        flash("Project added successfully!", "success")
         return redirect(url_for("admin"))
 
     except Exception as e:
-        flash(f"Error adding project: {str(e)}")
+        print("❌ Error occurred:", str(e))
+        flash(f"Error adding project: {str(e)}", "error")
         return redirect(url_for("admin"))
-
 
 @app.route("/logout")
 def logout():
